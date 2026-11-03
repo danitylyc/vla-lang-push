@@ -8,7 +8,7 @@ policy in the loop; here we do the same with a tiny REINFORCE trainer:
     reward per step   = 8 * (distance_to_goal_{t-1} - distance_to_goal_t)
     + success bonus   = +10 on episode success
 
-The policy head is the behavior-cloned VLA (CNN+GRU+MLP); the action is
+The policy head is the behavior-cloned VLA (CNN+Transformer+MLP); the action is
 sampled from a diagonal Gaussian around the network mean with fixed std=0.2,
 so the policy gradient is computable from the observations already available
 (rgb, instruction). Runs on CPU.
