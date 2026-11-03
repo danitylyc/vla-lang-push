@@ -1,7 +1,7 @@
 # VLA-Lang-Push
 
 A minimal, fully reproducible **Vision-Language-Action (VLA) policy** that
-follows free-form Chinese instructions to push a cube to one of four
+follows free-form English natural-language instructions to push a cube to one of four
 workspace regions in a real physics simulator (pybullet + panda-gym
 PandaPush-v3).
 
@@ -27,8 +27,8 @@ closed-loop evaluation.
 PandaPush-v3 in pybullet. A cube starts at a random pose in the annulus
 0.06–0.085 m around one of four regions (top-left / top-right / bottom-left /
 bottom-right), i.e. **outside** the success disk of 0.05 m — the start is never
-already a success. The instruction is a Chinese sentence such as
-"把方块推到左上角" (push the cube to the top-left corner). Success = cube within
+already a success. The instruction is an English sentence such as
+"push the green cube to the top left target". Success = cube within
 0.05 m of the named region center within 60 steps.
 
 The analytic oracle that generates demonstrations is a hand-designed 3-phase
@@ -41,8 +41,8 @@ which bounds what a learned policy can achieve.
 | component | design |
 |---|---|
 | observation | RGB image (64×64, 3 ch) from the simulator camera |
-| instruction | char-level Chinese tokenizer, 23-token vocabulary |
-| policy | VLA: CNN (vision) + GRU (language) → MLP → 3-dim action (dx, dy, dz) |
+| instruction | word-level tokenizer (English), 23-token vocabulary |
+| policy | VLA: CNN (vision) + Transformer (language) → MLP → 3-dim action (dx, dy, dz) |
 | training | behavior cloning (MSE) on `{image, instruction} → action`, CPU |
 | fine-tuning | closed-loop REINFORCE on top of the BC policy (simulator rollouts) |
 | data | 1,500 oracle rollouts, success trajectories only (22,313 steps) |
@@ -107,7 +107,7 @@ Requires: `panda-gym`, `pybullet`, `numpy`, `torch` (CPU is enough).
 - Behavior cloning on short-horizon pushes with image-only observations: no
   grasping, single cube, no distractors; closed-loop success is bounded by
   contact-level precision, not by language understanding.
-- The instruction vocabulary is minimal (23 chars / 4 regions); it demonstrates
+- The instruction vocabulary is minimal (23 words / 4 regions); it demonstrates
   **wording generalization**, not open-ended language understanding.
 - The REINFORCE fine-tuner uses a fixed exploration std and a mean baseline —
   a plain, debuggable implementation, not a tuned PPO.
