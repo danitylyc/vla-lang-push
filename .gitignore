@@ -1,0 +1,10 @@
+# generated demo data (reproducible via `python vla_env.py collect`)
+data/
+
+# training / eval logs & scratch output
+*.log
+*.txt
+
+# python caches
+__pycache__/
+.pytest_cache/
